@@ -5,6 +5,7 @@
  "autoname": "prompt",
  "creation": "2025-10-14 17:18:29.395193",
  "doctype": "DocType",
+  "custom": 1,
  "engine": "InnoDB",
  "field_order": [
   "scl_short_name"

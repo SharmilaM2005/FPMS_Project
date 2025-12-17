@@ -4,6 +4,7 @@
  "autoname": "prompt",
  "creation": "2025-10-14 17:26:43.818598",
  "doctype": "DocType",
+  "custom": 1,
  "engine": "InnoDB",
  "field_order": [
   "section_break_ymrw"

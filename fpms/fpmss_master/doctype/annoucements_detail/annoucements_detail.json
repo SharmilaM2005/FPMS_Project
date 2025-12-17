@@ -5,6 +5,7 @@
  "creation": "2025-11-14 15:09:30.362216",
  "default_view": "List",
  "doctype": "DocType",
+  "custom": 1,
  "engine": "InnoDB",
  "field_order": [
   "school",

@@ -3,6 +3,7 @@
  "autoname": "autoincrement",
  "creation": "2025-10-27 16:03:48.878720",
  "doctype": "DocType",
+  "custom": 1,
  "engine": "InnoDB",
  "field_order": [
   "employee_id",

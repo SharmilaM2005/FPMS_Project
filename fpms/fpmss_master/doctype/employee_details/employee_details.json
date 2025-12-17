@@ -4,6 +4,7 @@
  "autoname": "autoincrement",
  "creation": "2025-10-27 09:49:46.790225",
  "doctype": "DocType",
+  "custom": 1,
  "engine": "InnoDB",
  "field_order": [
   "employee_name",
