@@ -1,4 +1,11 @@
-# # # import frappe
+import frappe
+from frappe.model.document import Document
+
+class AnnoucementsDetail(Document):
+    pass
+
+# 
+# import frappe
 # # # from frappe.model.document import Document
 # # # from frappe.utils import get_url
 
@@ -187,181 +194,181 @@
 # # #         )
 
 
-# # import frappe
-# # from frappe.model.document import Document
-# # from frappe.utils import get_url
+# import frappe
+# from frappe.model.document import Document
+# from frappe.utils import get_url
 
 
-# # class AnnoucementsDetail(Document):
+# class AnnoucementsDetail(Document):
 
-# #     def after_insert(self):
-# #         send_announcement_email(self)
-
-
-# # # ============================================================
-# # # ✉️ SEND ANNOUNCEMENT EMAIL
-# # # ============================================================
-# # def send_announcement_email(doc):
-
-# #     recipients = []
-
-# #     # ------------------------------------------------
-# #     # 1️⃣ Collect Faculty Emails
-# #     # ------------------------------------------------
-# #     for row in doc.faculty_name or []:
-# #         email = frappe.db.get_value("Faculty", row.faculty, "email")
-# #         if email:
-# #             recipients.append(email)
-
-# #     # ------------------------------------------------
-# #     # 2️⃣ Collect Supervisor Emails
-# #     # ------------------------------------------------
-# #     for row in doc.supervisor_name or []:
-# #         email = frappe.db.get_value("Supervisor", row.supervisor, "email")
-# #         if email:
-# #             recipients.append(email)
-
-# #     recipients = list(set(recipients))
-
-# #     if not recipients:
-# #         frappe.msgprint("⚠️ No email IDs found")
-# #         return
-
-# #     subject = "Creation of FPMS Form"
-# #     base_url = get_url()
-# #     year = doc.academic_year or "2025-2026"
-
-# #     # ------------------------------------------------
-# #     # 3️⃣ Send Email
-# #     # ------------------------------------------------
-# #     for email in recipients:
-
-# #         faculty = frappe.db.get_value(
-# #             "Faculty",
-# #             {"email": email},
-# #             ["faculty_name", "emp_code"],
-# #             as_dict=True
-# #         ) or {}
-
-# #         faculty_name = faculty.get("faculty_name") or "Faculty Member"
-# #         emp_code = faculty.get("emp_code") or "-"
-
-# #         # 🔑 Generate token
-# #         token = frappe.generate_hash(length=32)
-
-# #         # 🔐 Store token data
-# #         frappe.cache().set_value(
-# #             f"tracker_token:{token}",
-# #             {
-# #                 "announcement": doc.name,
-# #                 "academic_year": doc.academic_year,
-# #                 "faculty_name": faculty_name,
-# #                 "emp_code": emp_code,
-# #                 "email": email
-# #             },
-# #             expires_in_sec=30 * 24 * 60 * 60
-# #         )
-
-# #         tracker_url = (
-# #             f"{base_url}/api/method/"
-# #             f"fpms.fpms.fpmss_masster.doctype."
-# #             f"annoucements_detail.annoucements_detail."
-# #             f"open_engagement_tracker?token={token}"
-# #         )
-
-# #         message = f"""
-# #         <p>Dear {faculty_name},</p>
-
-# #         <p>
-# #         Your FPMS form for the academic year <b>{year}</b> has been created.
-# #         </p>
-
-# #         <p>
-# #         Click the link below to open your Engagement Tracker:
-# #         </p>
-
-# #         <p>
-# #         <a href="{tracker_url}">{tracker_url}</a>
-# #         </p>
-
-# #         <p><i>This is an automated email. Please do not reply.</i></p>
-
-# #         <p>
-# #         Regards,<br>
-# #         <b>People Function</b>
-# #         </p>
-# #         """
-
-# #         frappe.sendmail(
-# #             recipients=[email],
-# #             subject=subject,
-# #             message=message
-# #         )
-
-# #     frappe.msgprint("✅ Announcement email sent successfully")
+#     def after_insert(self):
+#         send_announcement_email(self)
 
 
-# # # ============================================================
-# # # ⭐ OPEN / CREATE ENGAGEMENT TRACKER
-# # # ============================================================
-# # @frappe.whitelist(allow_guest=True)
-# # def open_engagement_tracker(token):
+# # ============================================================
+# # ✉️ SEND ANNOUNCEMENT EMAIL
+# # ============================================================
+# def send_announcement_email(doc):
 
-# #     data = frappe.cache().get_value(f"tracker_token:{token}")
+#     recipients = []
 
-# #     if not data:
-# #         frappe.respond_as_web_page(
-# #             "Link Expired",
-# #             "This link has expired. Please contact fpmssupport@apu.edu.in",
-# #             http_status_code=404
-# #         )
-# #         return
+#     # ------------------------------------------------
+#     # 1️⃣ Collect Faculty Emails
+#     # ------------------------------------------------
+#     for row in doc.faculty_name or []:
+#         email = frappe.db.get_value("Faculty", row.faculty, "email")
+#         if email:
+#             recipients.append(email)
 
-# #     # 🔐 Redirect guest to login
-# #     if frappe.session.user == "Guest":
-# #         frappe.local.response["type"] = "redirect"
-# #         frappe.local.response["location"] = (
-# #             f"/login?redirect-to=/api/method/"
-# #             f"fpms.fpms.fpmss_masster.doctype."
-# #             f"annoucements_detail.annoucements_detail."
-# #             f"open_engagement_tracker?token={token}"
-# #         )
-# #         return
+#     # ------------------------------------------------
+#     # 2️⃣ Collect Supervisor Emails
+#     # ------------------------------------------------
+#     for row in doc.supervisor_name or []:
+#         email = frappe.db.get_value("Supervisor", row.supervisor, "email")
+#         if email:
+#             recipients.append(email)
 
-# #     # ------------------------------------------------
-# #     # 1️⃣ Check existing tracker
-# #     # ------------------------------------------------
-# #     existing = frappe.db.exists(
-# #         "Engagement Tracker",
-# #         {
-# #             "announcement": data["announcement"],
-# #             "academic_year": data["academic_year"],
-# #             "employee_id": data["emp_code"]
-# #         }
-# #     )
+#     recipients = list(set(recipients))
 
-# #     if existing:
-# #         frappe.local.response["type"] = "redirect"
-# #         frappe.local.response["location"] = f"/app/engagement-tracker/{existing}"
-# #         return
+#     if not recipients:
+#         frappe.msgprint("⚠️ No email IDs found")
+#         return
 
-# #     # ------------------------------------------------
-# #     # 2️⃣ Create tracker (AUTO-FILL WORKS HERE)
-# #     # ------------------------------------------------
-# #     tracker = frappe.get_doc({
-# #         "doctype": "Engagement Tracker",
-# #         "announcement": data["announcement"],
-# #         "academic_year": data["academic_year"],
-# #         "employee_name": data["faculty_name"],
-# #         "employee_id": data["emp_code"],
-# #         "owner": frappe.session.user
-# #     })
+#     subject = "Creation of FPMS Form"
+#     base_url = get_url()
+#     year = doc.academic_year or "2025-2026"
 
-# #     tracker.insert(ignore_permissions=True)
-# #     frappe.db.commit()
+#     # ------------------------------------------------
+#     # 3️⃣ Send Email
+#     # ------------------------------------------------
+#     for email in recipients:
 
-# #     frappe.local.response["type"] = "redirect"
-# #     frappe.local.response["location"] = f"/app/engagement-tracker/{tracker.name}"
+#         faculty = frappe.db.get_value(
+#             "Faculty",
+#             {"email": email},
+#             ["faculty_name", "emp_code"],
+#             as_dict=True
+#         ) or {}
+
+#         faculty_name = faculty.get("faculty_name") or "Faculty Member"
+#         emp_code = faculty.get("emp_code") or "-"
+
+#         # 🔑 Generate token
+#         token = frappe.generate_hash(length=32)
+
+#         # 🔐 Store token data
+#         frappe.cache().set_value(
+#             f"tracker_token:{token}",
+#             {
+#                 "announcement": doc.name,
+#                 "academic_year": doc.academic_year,
+#                 "faculty_name": faculty_name,
+#                 "emp_code": emp_code,
+#                 "email": email
+#             },
+#             expires_in_sec=30 * 24 * 60 * 60
+#         )
+
+#         tracker_url = (
+#             f"{base_url}/api/method/"
+#             f"fpms.fpms.fpmss_masster.doctype."
+#             f"annoucements_detail.annoucements_detail."
+#             f"open_engagement_tracker?token={token}"
+#         )
+
+#         message = f"""
+#         <p>Dear {faculty_name},</p>
+
+#         <p>
+#         Your FPMS form for the academic year <b>{year}</b> has been created.
+#         </p>
+
+#         <p>
+#         Click the link below to open your Engagement Tracker:
+#         </p>
+
+#         <p>
+#         <a href="{tracker_url}">{tracker_url}</a>
+#         </p>
+
+#         <p><i>This is an automated email. Please do not reply.</i></p>
+
+#         <p>
+#         Regards,<br>
+#         <b>People Function</b>
+#         </p>
+#         """
+
+#         frappe.sendmail(
+#             recipients=[email],
+#             subject=subject,
+#             message=message
+#         )
+
+#     frappe.msgprint("✅ Announcement email sent successfully")
+
+
+# # ============================================================
+# # ⭐ OPEN / CREATE ENGAGEMENT TRACKER
+# # ============================================================
+# @frappe.whitelist(allow_guest=True)
+# def open_engagement_tracker(token):
+
+#     data = frappe.cache().get_value(f"tracker_token:{token}")
+
+#     if not data:
+#         frappe.respond_as_web_page(
+#             "Link Expired",
+#             "This link has expired. Please contact fpmssupport@apu.edu.in",
+#             http_status_code=404
+#         )
+#         return
+
+#     # 🔐 Redirect guest to login
+#     if frappe.session.user == "Guest":
+#         frappe.local.response["type"] = "redirect"
+#         frappe.local.response["location"] = (
+#             f"/login?redirect-to=/api/method/"
+#             f"fpms.fpms.fpmss_masster.doctype."
+#             f"annoucements_detail.annoucements_detail."
+#             f"open_engagement_tracker?token={token}"
+#         )
+#         return
+
+#     # ------------------------------------------------
+#     # 1️⃣ Check existing tracker
+#     # ------------------------------------------------
+#     existing = frappe.db.exists(
+#         "Engagement Tracker",
+#         {
+#             "announcement": data["announcement"],
+#             "academic_year": data["academic_year"],
+#             "employee_id": data["emp_code"]
+#         }
+#     )
+
+#     if existing:
+#         frappe.local.response["type"] = "redirect"
+#         frappe.local.response["location"] = f"/app/engagement-tracker/{existing}"
+#         return
+
+#     # ------------------------------------------------
+#     # 2️⃣ Create tracker (AUTO-FILL WORKS HERE)
+#     # ------------------------------------------------
+#     tracker = frappe.get_doc({
+#         "doctype": "Engagement Tracker",
+#         "announcement": data["announcement"],
+#         "academic_year": data["academic_year"],
+#         "employee_name": data["faculty_name"],
+#         "employee_id": data["emp_code"],
+#         "owner": frappe.session.user
+#     })
+
+#     tracker.insert(ignore_permissions=True)
+#     frappe.db.commit()
+
+#     frappe.local.response["type"] = "redirect"
+#     frappe.local.response["location"] = f"/app/engagement-tracker/{tracker.name}"
 
 
 # import frappe
