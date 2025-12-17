@@ -4,6 +4,7 @@
  "creation": "2025-10-14 16:30:53.169622",
  "default_view": "List",
  "doctype": "DocType",
+ "custom": 1,
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [

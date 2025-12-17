@@ -3,6 +3,7 @@
  "allow_rename": 1,
  "creation": "2025-10-14 16:38:06.426810",
  "doctype": "DocType",
+ "custom": 1,
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [

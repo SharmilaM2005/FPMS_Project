@@ -3,6 +3,12 @@
  
 // frappe.ui.form.on("Annoucements Detail", {
  
+
+
+
+frappe.ui.form.on("Annoucements Detail", {
+    // intentionally left blank
+});
 //     // // -------------------------------
 //     // // ✅ AUTO FILL FACULTY TABLE
 //     // // -------------------------------
